@@ -5,24 +5,22 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 
 import Header from "../components/Header";
 
+import { UserLogin } from "../pages";
+
 const AppRoutes = () => {
+	return (
+		<>
+			<Router>
+				<Header />
 
-    return (
-        <>
-            <Router>
-
-                <Header />
-
-
-            </Router>
-
-
-        </>
-    )
-
-
-
-
-}
+				<Routes>
+					{/* Default Routes */}
+					<Route path="/" element={<Navigate to="/user/login" />} />
+					<Route path="/user/login" element={<UserLogin />} />
+				</Routes>
+			</Router>
+		</>
+	);
+};
 
 export default AppRoutes;
