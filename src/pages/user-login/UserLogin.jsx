@@ -1,9 +1,11 @@
 import React, { useContext, useState } from "react";
 import UserContext from "../../contexts/UserContext";
+import Spinner from "../../components/spinner";
 
 const UserLogin = () => {
 	return (
 		<>
+			{<Spinner />}
 			<div className="min-h-screenbg-gray-100 mt-16 flex flex-col justify-center py-12 sm:px-6 lg:px-8 px-6">
 				<div className="sm:mx-auto sm:w-full sm:max-w-md md:overflow-hidden">
 					<img className="mx-auto h-10 w-auto" src="https://www.svgrepo.com/show/301692/login.svg" alt="Workflow" />
