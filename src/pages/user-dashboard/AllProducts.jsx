@@ -25,6 +25,8 @@ const AllProducts = () => {
 							<th className="py-2 px-4 border">Minimum Stock Level</th>
 							<th className="py-2 px-4 border">Status</th>
 							<th className="py-2 px-4 border">Action</th>
+							<th className="py-2 px-4 border">Action</th>
+							<th className="py-2 px-4 border">Action</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -36,7 +38,16 @@ const AllProducts = () => {
 								<td className="py-2 px-4 border">{product.quantityInStock}</td>
 								<td className="py-2 px-4 border">{product.price}</td>
 								<td className="py-2 px-4 border">{product.mininumStockLevel}</td>
-								{/* <td className="py-2 px-4 border">{product.status}</td> */}
+								<td className="py-2 px-4 border">
+									{product.quantityInStock === 0 ? (
+										<span className="text-red-500 font-bold">Out of Stock</span>
+									) : product.quantityInStock < product.mininumStockLevel ? (
+										<span className="text-orange-500 font-bold">Low Stock</span>
+									) : (
+										<span className="text-green-500 font-bold">In Stock</span>
+									)}
+								</td>
+								<td className="py-2 px-4 border">Action</td>
 								<td className="py-2 px-4 border">Action</td>
 								<td className="py-2 px-4 border">Action</td>
 							</tr>
