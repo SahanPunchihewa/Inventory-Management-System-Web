@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 
 import Header from "../components/Header";
 
-import { UserLogin } from "../pages";
+import { UserLogin, UserDashboard } from "../pages";
 
 const AppRoutes = () => {
 	return (
@@ -17,6 +17,7 @@ const AppRoutes = () => {
 					{/* Default Routes */}
 					<Route path="/" element={<Navigate to="/user/login" />} />
 					<Route path="/user/login" element={<UserLogin />} />
+					<Route path="/user" element={<UserDashboard />} />
 				</Routes>
 			</Router>
 		</>
