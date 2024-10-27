@@ -7,6 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 export const UserContext = createContext();
 
 export function UserProvider({ children }) {
+	const navigate = useNavigate();
 	const [user, setUser] = useState({
 		username: "",
 		password: "",
@@ -17,10 +18,12 @@ export function UserProvider({ children }) {
 		mutationFn: () => UserAPI.login(user),
 		onSuccess: (response) => {
 			if (response.data.role === "ADMIN") {
-				localStorage.setItem("uId", response.data.username);
-				localStorage.setItem("role", response.data.role);
+				localStorage.setItem("uId", response.data.id);
+				localStorage.setItem("username", response.data.username);
+				localStorage.setItem("permissionLevel", response.data.role);
 				localStorage.setItem("authToken", response.data.token);
 				makeToast({ type: "success", message: "Login Successful" });
+				window.location.href = "/user";
 			} else if (response.data.role === "EMPLOYEE") {
 				localStorage.setItem("uId", response.data.username);
 				localStorage.setItem("role", response.data.role);
@@ -50,4 +53,4 @@ export function UserProvider({ children }) {
 	);
 }
 
-export default UserProvider;
+export default UserContext;
