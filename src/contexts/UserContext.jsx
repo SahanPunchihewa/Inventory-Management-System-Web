@@ -4,7 +4,7 @@ import UserAPI from "./api/UserAPI";
 import { makeToast } from "../components";
 import { useMutation } from "@tanstack/react-query";
 
-export const UserContext = createContext();
+const UserContext = createContext();
 
 export function UserProvider({ children }) {
 	const navigate = useNavigate();
@@ -32,7 +32,6 @@ export function UserProvider({ children }) {
 			} else {
 				makeToast({ type: "error", message: "Invalid Credentials" });
 			}
-			// success handling code
 		},
 		onError: (error) => {
 			makeToast({ type: "error", message: "Login Failed" });

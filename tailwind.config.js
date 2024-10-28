@@ -4,8 +4,7 @@ export default {
 	theme: {
 		extend: {
 			colors: {
-				"primary-sky-blue": "#374151",
-				"secondary-sky-blue": "#06b6d4",
+				"primary-color": "#475569",
 				"pop-up-colour": "#f8fafc",
 			},
 		},
