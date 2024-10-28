@@ -7,18 +7,22 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 const ProductContext = createContext();
 
 export function ProductProvider({ children }) {
-	// const [product, setProduct] = useState({
-	// 	id: "",
-	// 	name: "",
-	// 	description: "",
-	// 	quantityInStock: "",
-	// 	price: "",
-	// 	mininumStockLevel: "",
-	// });
-
 	const [isLoading, setIsLoading] = useState(false);
 	const [products, setProducts] = useState([]);
+	const [inventorySummary, setInventorySummary] = useState([]);
+	const [lowStockProducts, setLowStockProducts] = useState([]);
+	const [outOfStockProducts, setOutOfStockProducts] = useState([]);
+	const [product, setProduct] = useState({
+		id: "",
+		productId: "",
+		name: "",
+		description: "",
+		quantityInStock: "",
+		price: "",
+		mininumStockLevel: "",
+	});
 
+	// Get all products
 	useEffect(() => {
 		setIsLoading(true);
 		ProductAPI.getAllProducts().then((response) => {
@@ -27,28 +31,48 @@ export function ProductProvider({ children }) {
 		});
 	}, []);
 
-	// const {
-	// 	isLoading: productsIsLoading,
-	// 	refetch: refetchProduct
-	// } = useQuery({
-	// 	queryKey: ["product"],
-	// 	queryFn: ProductAPI.getAllProducts,
-	// 	onSuccess: (res) => {
-	// 		setProducts(res.data);
-	// 	}
-	// })
+	// inventorySummary
+	useEffect(() => {
+		setIsLoading(true);
+		ProductAPI.getInventorySummary().then((response) => {
+			setInventorySummary(response.data);
+			setIsLoading(false);
+		});
+	}, []);
+
+	// get low stock products
+	useEffect(() => {
+		setIsLoading(true);
+		ProductAPI.getLowStockProducts().then((response) => {
+			setLowStockProducts(response.data);
+			setIsLoading(false);
+		});
+	}, []);
+
+	//  get out of stock products
+	useEffect(() => {
+		setIsLoading(true);
+		ProductAPI.getOutOfStockProducts().then((response) => {
+			setOutOfStockProducts(response.data);
+			setIsLoading(false);
+		});
+	}, []);
 
 	return (
 		<ProductContext.Provider
 			value={{
-				// product,
-				// setProduct,
+				product,
+				setProduct,
 				products,
 				setProducts,
-				// productsIsLoading,
-				// refetchProduct,
 				isLoading,
 				setIsLoading,
+				inventorySummary,
+				setInventorySummary,
+				lowStockProducts,
+				setLowStockProducts,
+				outOfStockProducts,
+				setOutOfStockProducts,
 			}}
 		>
 			{children}

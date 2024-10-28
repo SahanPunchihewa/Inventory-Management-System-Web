@@ -32,7 +32,6 @@ export function UserProvider({ children }) {
 			} else {
 				makeToast({ type: "error", message: "Invalid Credentials" });
 			}
-			// success handling code
 		},
 		onError: (error) => {
 			makeToast({ type: "error", message: "Login Failed" });

@@ -28,7 +28,7 @@ const Header = () => {
 
 	return (
 		<>
-			<div className="bg-primary-sky-blue lg:pb-12 h-20 rounded-sm">
+			<div className="bg-primary-color lg:pb-12 h-20 rounded-sm">
 				<div className="mx-auto max-w-screen-xl px-4 md:px-2">
 					<header className="flex items-center justify-between py-4 md:py-6">
 						<a
@@ -39,24 +39,6 @@ const Header = () => {
 							<BuildingOfficeIcon className="w-8 h-8" />
 							Inventory Management System
 						</a>
-
-						<nav className="hidden lg:flex items-center justify-center gap-10 flex-1 mr-32">
-							<a
-								href="#"
-								className="flex items-center gap-2 text-lg font-semibold text-white transition duration-100 hover:text-secondary-sky-blue"
-							>
-								<HomeIcon className="w-5 h-5" />
-								Home
-							</a>
-							<a
-								href="#"
-								className="flex items-center gap-2 text-lg font-semibold text-white transition duration-100 hover:text-secondary-sky-blue"
-							>
-								<ChartBarIcon className="w-5 h-5" />
-								Dashboard
-							</a>
-						</nav>
-
 						{permissionLevel && (
 							<button
 								onClick={logout}

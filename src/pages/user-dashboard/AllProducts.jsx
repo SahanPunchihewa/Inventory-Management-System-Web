@@ -2,14 +2,72 @@ import React, { useContext } from "react";
 import { FaEdit, FaRedoAlt, FaTrash } from "react-icons/fa";
 import ProductContext from "../../contexts/ProductContext";
 import { Spinner } from "../../components";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const AllProducts = () => {
-	const { products, isLoading } = useContext(ProductContext);
+	const { products, isLoading, inventorySummary } = useContext(ProductContext);
+
+	function handleGenerateSummary() {
+		const doc = new jsPDF();
+		const today = new Date().toLocaleDateString();
+
+		const tableColumn = [
+			"Product ID",
+			"Product Name",
+			"Product Description",
+			"Quantity In Stock",
+			"Unit Price",
+			"Minimum Stock Level",
+		];
+		const tableRows = [];
+
+		const { lowStockProduct, outOfStockProduct, totalProducts } = inventorySummary;
+
+		products.forEach((item) => {
+			const rowData = [
+				item.productId,
+				item.name,
+				item.description,
+				item.quantityInStock,
+				item.price,
+				item.mininumStockLevel,
+			];
+			tableRows.push(rowData);
+		});
+
+		doc.setFontSize(16);
+		doc.setFont("Helvetica", "bold");
+		doc.text(`Inventory Summary Report`, 14, 15);
+		doc.setFontSize(12);
+		doc.setFont("Helvetica", "normal");
+		doc.text(`Generated on: ${today}`, 14, 22);
+		doc.autoTable(tableColumn, tableRows, { startY: 60 });
+		doc.setFontSize(12);
+		doc.text(`Total Products: ${totalProducts}`, 14, 32);
+		doc.text(`Low Stock Products: ${lowStockProduct}`, 14, 42);
+		doc.text(`Out of Stock Products: ${outOfStockProduct}`, 14, 52);
+		doc.save("inventory-summary.pdf");
+	}
 
 	return (
 		<div className="p-4">
 			{isLoading && <Spinner />}
-			<h2 className="text-2xl mb-4">All Products</h2>
+			<div className="flex justify-center mb-4">
+				<h2 className="text-xl font-bold text-white bg-green-500 px-4 py-2 rounded-md inline-block shadow-md">
+					All Products
+				</h2>
+			</div>
+
+			<div className="mb-4">
+				<button
+					onClick={() => handleGenerateSummary()}
+					className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
+				>
+					Generate Inventory Summary
+				</button>
+			</div>
+
 			<div className="overflow-x-auto rounded-lg">
 				<table className="min-w-full bg-white border border-gray-300">
 					<thead>
@@ -69,5 +127,3 @@ const AllProducts = () => {
 };
 
 export default AllProducts;
-
-

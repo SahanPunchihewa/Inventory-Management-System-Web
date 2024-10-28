@@ -1,38 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { FaBox, FaExclamationTriangle, FaClipboardList, FaChartPie } from "react-icons/fa";
+import { Spinner } from "../../components";
 import ProductContext from "../../contexts/ProductContext";
-
-const DashboardTab = () => {
-	const [totalProducts, setTotalProducts] = useState(0);
-	const [lowStockProducts, setLowStockProducts] = useState(0);
-	const [outOfStockProducts, setOutOfStockProducts] = useState(0);
-	const [inventorySummary, setInventorySummary] = useState(0);
-
-	useEffect(() => {
-		// Fetch data from API and set the state
-		// Example data setting (replace with actual API calls)
-		setTotalProducts(100);
-		setLowStockProducts(20);
-		setOutOfStockProducts(10);
-		setInventorySummary(70);
-	}, []);
-
-	return (
-		<div className="bg-gray-100 min-h-screen rounded-lg p-4 md:p-6">
-			<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 p-2">
-				<Card title="Total Products" value={totalProducts} icon={<FaBox />} color="bg-blue-500" />
-				<Card
-					title="Low Stock Products"
-					value={lowStockProducts}
-					icon={<FaExclamationTriangle />}
-					color="bg-yellow-500"
-				/>
-				<Card title="Out of Stock Products" value={outOfStockProducts} icon={<FaClipboardList />} color="bg-red-500" />
-				<Card title="Total Employees" value={inventorySummary} icon={<FaChartPie />} color="bg-green-500" />
-			</div>
-		</div>
-	);
-};
 
 const Card = ({ title, value, icon, color }) => {
 	return (
@@ -47,6 +16,28 @@ const Card = ({ title, value, icon, color }) => {
 					</div>
 					<div className="text-3xl font-bold">{value}</div>
 				</div>
+			</div>
+		</div>
+	);
+};
+
+const DashboardTab = () => {
+	const { inventorySummary, isLoading } = useContext(ProductContext);
+	const { lowStockProduct, outOfStockProduct, totalProducts } = inventorySummary;
+
+	return (
+		<div className="bg-gray-100 min-h-screen rounded-lg p-4 md:p-6">
+			<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 p-2">
+				{isLoading && <Spinner />}
+				<Card title="Total Products" value={totalProducts} icon={<FaBox />} color="bg-green-500" />
+				<Card
+					title="Low Stock Products"
+					value={lowStockProduct}
+					icon={<FaExclamationTriangle />}
+					color="bg-yellow-500"
+				/>
+				<Card title="Out of Stock Products" value={outOfStockProduct} icon={<FaClipboardList />} color="bg-red-500" />
+				<Card title="Total Employees" value="" icon={<FaChartPie />} color="bg-blue-500" />
 			</div>
 		</div>
 	);
