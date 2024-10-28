@@ -37,7 +37,7 @@ class ProductAPI {
 
 	// update product
 	static updateProduct(id, values) {
-		return axios.put(`${BASE_URL}/api/Product/${id}`, values, requestConfig);
+		return axios.put(`${BASE_URL}/api/Product/${id}`, values, requestConfigJson);
 	}
 
 	// delete product
