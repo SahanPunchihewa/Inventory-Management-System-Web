@@ -1,12 +1,13 @@
 import React, { useContext } from "react";
-import { FaEdit, FaRedoAlt, FaTrash } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
 import ProductContext from "../../contexts/ProductContext";
 import { Spinner } from "../../components";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 
 const AllProducts = () => {
-	const { products, isLoading, inventorySummary } = useContext(ProductContext);
+	const { products, isLoading, inventorySummary, deleteProduct } = useContext(ProductContext);
 
 	function handleGenerateSummary() {
 		const doc = new jsPDF();
@@ -22,7 +23,7 @@ const AllProducts = () => {
 		];
 		const tableRows = [];
 
-		const { lowStockProduct, outOfStockProduct, totalProducts } = inventorySummary;
+		const { lowStockProduct, outOfStockProduct, totalProducts, totalValue } = inventorySummary;
 
 		products.forEach((item) => {
 			const rowData = [
@@ -42,11 +43,12 @@ const AllProducts = () => {
 		doc.setFontSize(12);
 		doc.setFont("Helvetica", "normal");
 		doc.text(`Generated on: ${today}`, 14, 22);
-		doc.autoTable(tableColumn, tableRows, { startY: 60 });
+		doc.autoTable(tableColumn, tableRows, { startY: 70 });
 		doc.setFontSize(12);
 		doc.text(`Total Products: ${totalProducts}`, 14, 32);
 		doc.text(`Low Stock Products: ${lowStockProduct}`, 14, 42);
 		doc.text(`Out of Stock Products: ${outOfStockProduct}`, 14, 52);
+		doc.text(`Total Value of Products: ${totalValue}`, 14, 62);
 		doc.save("inventory-summary.pdf");
 	}
 
@@ -59,17 +61,17 @@ const AllProducts = () => {
 				</h2>
 			</div>
 
-			<div className="mb-4">
+			<div className="mb-4 flex justify-center md:justify-start">
 				<button
 					onClick={() => handleGenerateSummary()}
-					className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
+					className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 font-semibold"
 				>
-					Generate Inventory Summary
+					Inventory Summary Report
 				</button>
 			</div>
 
 			<div className="overflow-x-auto rounded-lg">
-				<table className="min-w-full bg-white border border-gray-300">
+				<table className="min-w-full bg-white border border-gray-300 text-xs sm:text-sm md:text-base">
 					<thead>
 						<tr className="bg-gray-200">
 							<th className="py-2 px-4 border">Product ID</th>
@@ -77,10 +79,10 @@ const AllProducts = () => {
 							<th className="py-2 px-4 border">Product Description</th>
 							<th className="py-2 px-4 border">Quantity In Stock</th>
 							<th className="py-2 px-4 border">Price</th>
-							<th className="py-2 px-4 border">Minimum Stock Level</th>
+							<th className="py-2 border">Minimum Stock Level</th>
 							<th className="py-2 px-4 border">Status</th>
+							<th className="py-2 px-4 border">Create</th>
 							<th className="py-2 px-4 border">Edit</th>
-							<th className="py-2 px-4 border">Restock</th>
 							<th className="py-2 px-4 border">Delete</th>
 						</tr>
 					</thead>
@@ -95,26 +97,32 @@ const AllProducts = () => {
 								<td className="py-2 px-4 border">{product.mininumStockLevel}</td>
 								<td className="py-2 px-4 border">
 									{product.quantityInStock === 0 ? (
-										<span className="text-red-500 font-bold">Out of Stock</span>
+										<span className="bg-red-500 text-white py-1 px-2 rounded-full text-xs font-bold">Out of Stock</span>
 									) : product.quantityInStock < product.mininumStockLevel ? (
-										<span className="text-orange-500 font-bold">Low Stock</span>
+										<span className="bg-yellow-500 text-white py-1 px-2 rounded-full text-xs font-bold">Low Stock</span>
 									) : (
-										<span className="text-green-500 font-bold">In Stock</span>
+										<span className="bg-green-500 text-white py-1 px-2 rounded-full text-xs font-bold">In Stock</span>
 									)}
 								</td>
 								<td className="py-2 px-4 border">
-									<button className="bg-blue-500 text-white px-2 py-1 rounded flex items-center gap-1 hover:bg-blue-600">
-										<FaEdit /> Edit
-									</button>
+									<Link to="/user/product/create">
+										<button className="bg-blue-500 text-white px-2 py-1 rounded flex items-center gap-1 hover:bg-blue-600 shadow-md">
+											<FaPlus />
+										</button>
+									</Link>
 								</td>
 								<td className="py-2 px-4 border">
-									<button className="bg-yellow-500 text-white px-2 py-1 rounded flex items-center gap-1 hover:bg-yellow-600">
-										<FaRedoAlt /> Restock
+									<button className="bg-yellow-500 text-white px-2 py-1 rounded flex items-center gap-1 hover:bg-yellow-600 shadow-md">
+										<FaEdit />
 									</button>
 								</td>
+
 								<td className="py-2 px-4 border">
-									<button className="bg-red-500 text-white px-2 py-1 rounded flex items-center gap-1 hover:bg-red-600">
-										<FaTrash /> Delete
+									<button
+										className="bg-red-500 text-white px-2 py-1 rounded flex items-center gap-1 hover:bg-red-600 shadow-md"
+										onClick={() => deleteProduct(product.id)}
+									>
+										<FaTrash />
 									</button>
 								</td>
 							</tr>

@@ -2,7 +2,6 @@ import { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProductAPI from "./api/ProductAPI";
 import { makeToast } from "../components";
-import { useMutation, useQuery } from "@tanstack/react-query";
 
 const ProductContext = createContext();
 
@@ -58,6 +57,20 @@ export function ProductProvider({ children }) {
 		});
 	}, []);
 
+	// delete product
+	const deleteProduct = (id) => {
+		ProductAPI.deleteProduct(id)
+			.then((response) => {
+				isLoading(true);
+				setProducts(products.filter((product) => product.id !== id));
+				makeToast({ type: "success", message: "Product deleted" });
+				setIsLoading(false);
+			})
+			.catch((error) => {
+				makeToast("error", error.response.data.message);
+			});
+	};
+
 	return (
 		<ProductContext.Provider
 			value={{
@@ -73,6 +86,7 @@ export function ProductProvider({ children }) {
 				setLowStockProducts,
 				outOfStockProducts,
 				setOutOfStockProducts,
+				deleteProduct,
 			}}
 		>
 			{children}
