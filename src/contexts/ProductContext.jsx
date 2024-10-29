@@ -18,7 +18,7 @@ export function ProductProvider({ children }) {
 		description: "",
 		quantityInStock: "",
 		price: "",
-		mininumStockLevel: "",
+		minimumStockLevel: "",
 	});
 
 	// Get all products
@@ -90,17 +90,14 @@ export function ProductProvider({ children }) {
 
 	// get one product
 	const getProduct = (id) => {
-		isLoading(true);
-		ProductAPI.getOneProduct(id)
-			.then((response) => {
-				setProduct(response.data);
+		useEffect(() => {
+			setIsLoading(true);
+			ProductAPI.getOneProduct(id).then((res) => {
+				setProduct(res.data);
 				setIsLoading(false);
-			})
-			.catch((error) => {
-				makeToast({ type: "error", message: "Product not found" });
 			});
+		}, []);
 	};
-
 	// Update product
 	const updateProduct = (values) => {
 		const newProductUpdate = {
@@ -114,7 +111,7 @@ export function ProductProvider({ children }) {
 		};
 
 		setIsLoading(true); // Corrected loading state update
-		ProductAPI.updateProduct(newProductUpdate)
+		ProductAPI.updateProduct(values.id, newProductUpdate)
 			.then((response) => {
 				setProducts(products.map((product) => (product.id === values.id ? newProductUpdate : product)));
 				setIsLoading(false);

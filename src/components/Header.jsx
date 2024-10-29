@@ -1,21 +1,10 @@
 import React, { useState } from "react";
-import {
-	ArrowRightOnRectangleIcon,
-	HomeIcon,
-	ChartBarIcon,
-	BuildingOfficeIcon,
-	UserIcon,
-	CogIcon,
-} from "@heroicons/react/24/outline";
+import { ArrowRightOnRectangleIcon, ChartBarIcon, BuildingOfficeIcon, UserIcon } from "@heroicons/react/24/outline";
 import makeToast from "./toast";
+import { Link } from "react-router-dom";
 
 const Header = () => {
-	const [isOpen, setIsOpen] = useState(false);
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-	const toggleMenu = () => {
-		setIsOpen(!isOpen);
-	};
 
 	const toggleDropdown = () => {
 		setIsDropdownOpen(!isDropdownOpen);
@@ -64,20 +53,13 @@ const Header = () => {
 
 								{isDropdownOpen && (
 									<div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
-										<a
-											href="/profile"
+										<Link
+											to="/user"
 											className="block px-4 py-2 text-gray-700 hover:bg-gray-200 flex items-center gap-2"
 										>
-											<UserIcon className="w-5 h-5" />
-											{localStorage.getItem("permissionLevel")}
-										</a>
-										<a
-											href="/settings"
-											className="block px-4 py-2 text-gray-700 hover:bg-gray-200 flex items-center gap-2"
-										>
-											<CogIcon className="w-5 h-5" />
-											Settings
-										</a>
+											<ChartBarIcon className="w-5 h-5" />
+											Dashboard
+										</Link>
 										<button
 											onClick={logout}
 											className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-200 flex items-center gap-2"
@@ -89,54 +71,8 @@ const Header = () => {
 								)}
 							</div>
 						)}
-
-						<button
-							className="lg:hidden text-white hover:text-secondary-sky-blue"
-							onClick={toggleMenu}
-							aria-label="Menu"
-						>
-							<svg
-								className="w-6 h-6"
-								fill="none"
-								stroke="currentColor"
-								viewBox="0 0 24 24"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-							</svg>
-						</button>
 					</div>
 				</header>
-
-				{isOpen && (
-					<div className="lg:hidden">
-						<nav className="flex flex-col gap-6 px-6 py-4 bg-primary-sky-blue">
-							<a
-								href="#"
-								className="flex items-center gap-2 text-lg font-semibold text-pop-up-colour transition duration-100 hover:text-secondary-sky-blue"
-							>
-								<HomeIcon className="w-5 h-5" />
-								Home
-							</a>
-							<a
-								href="#"
-								className="flex items-center gap-2 text-lg font-semibold text-pop-up-colour transition duration-100 hover:text-secondary-sky-blue"
-							>
-								<ChartBarIcon className="w-5 h-5" />
-								Dashboard
-							</a>
-							{permissionLevel && (
-								<button
-									onClick={logout}
-									className="flex items-center gap-2 text-lg font-semibold text-pop-up-colour transition duration-100 hover:text-secondary-sky-blue"
-								>
-									<ArrowRightOnRectangleIcon className="w-5 h-5" />
-									Logout
-								</button>
-							)}
-						</nav>
-					</div>
-				)}
 			</div>
 		</div>
 	);

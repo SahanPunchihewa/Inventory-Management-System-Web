@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { FaEdit, FaPlus, FaTrash, FaSyncAlt } from "react-icons/fa";
+import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
 import ProductContext from "../../contexts/ProductContext";
 import { Spinner } from "../../components";
 import jsPDF from "jspdf";
@@ -8,6 +8,8 @@ import "jspdf-autotable";
 
 const AllProducts = () => {
 	const { products, isLoading, inventorySummary, deleteProduct } = useContext(ProductContext);
+
+	const permissionLevel = localStorage.getItem("permissionLevel");
 
 	function handleGenerateSummary() {
 		const doc = new jsPDF();
@@ -32,7 +34,7 @@ const AllProducts = () => {
 				item.description,
 				item.quantityInStock,
 				item.price,
-				item.mininumStockLevel,
+				item.minimumStockLevel,
 			];
 			tableRows.push(rowData);
 		});
@@ -69,10 +71,14 @@ const AllProducts = () => {
 					Inventory Summary Report
 				</button>
 
-				{/* Create Button aligned to the right */}
 				<div className="flex justify-end">
 					<Link to="/user/product/create">
-						<button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 font-semibold flex items-center gap-2">
+						<button
+							className={`${
+								permissionLevel === "EMPLOYEE" ? "bg-gray-400 cursor-not-allowed" : "bg-green-500 hover:bg-green-600"
+							} text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2`}
+							disabled={permissionLevel === "EMPLOYEE"}
+						>
 							<FaPlus />
 							Create Product
 						</button>
@@ -91,7 +97,6 @@ const AllProducts = () => {
 							<th className="py-2 px-4 border">Price</th>
 							<th className="py-2 border">Minimum Stock Level</th>
 							<th className="py-2 px-4 border">Status</th>
-							<th className="py-2 px-4 border">Create</th>
 							<th className="py-2 px-4 border">Edit</th>
 							<th className="py-2 px-4 border">Delete</th>
 						</tr>
@@ -104,35 +109,33 @@ const AllProducts = () => {
 								<td className="py-2 px-4 border">{product.description}</td>
 								<td className="py-2 px-4 border">{product.quantityInStock}</td>
 								<td className="py-2 px-4 border">{product.price}</td>
-								<td className="py-2 px-4 border">{product.mininumStockLevel}</td>
+								<td className="py-2 px-4 border">{product.minimumStockLevel}</td>
 								<td className="py-2 px-4 border">
 									{product.quantityInStock === 0 ? (
-										<span className="bg-red-500 text-white py-1 px-2 rounded-full text-xs font-bold">Out of Stock</span>
-									) : product.quantityInStock < product.mininumStockLevel ? (
-										<span className="bg-yellow-500 text-white py-1 px-2 rounded-full text-xs font-bold">Low Stock</span>
+										<span className="bg-red-500 text-white py-1 px-2 rounded-full text-sm font-bold">Out of Stock</span>
+									) : product.quantityInStock < product.minimumStockLevel ? (
+										<span className="bg-yellow-500 text-white py-1 px-2 rounded-full text-sm font-bold">Low Stock</span>
 									) : (
-										<span className="bg-green-500 text-white py-1 px-2 rounded-full text-xs font-bold">In Stock</span>
+										<span className="bg-green-500 text-white py-1 px-2 rounded-full text-sm font-bold">In Stock</span>
 									)}
 								</td>
 								<td className="py-2 px-4 border">
-									<Link to="/user/product/create">
-										<button className="bg-blue-500 text-white px-2 py-1 rounded flex items-center gap-1 hover:bg-blue-600 shadow-md">
-											<FaSyncAlt />
-										</button>
-									</Link>
-								</td>
-								<td className="py-2 px-4 border">
 									<Link to={`/user/product/edit/${product.id}`}>
-										<button className="bg-yellow-500 text-white px-2 py-1 rounded flex items-center gap-1 hover:bg-yellow-600 shadow-md">
+										<button
+											className="bg-yellow-500 hover:bg-yellow-600
+												text-white px-2 py-1 rounded flex items-center gap-1 shadow-md"
+										>
 											<FaEdit />
 										</button>
 									</Link>
 								</td>
-
 								<td className="py-2 px-4 border">
 									<button
-										className="bg-red-500 text-white px-2 py-1 rounded flex items-center gap-1 hover:bg-red-600 shadow-md"
+										className={`${
+											permissionLevel === "EMPLOYEE" ? "bg-gray-400 cursor-not-allowed" : "bg-red-500 hover:bg-red-600"
+										} text-white px-2 py-1 rounded flex items-center gap-1 shadow-md`}
 										onClick={() => deleteProduct(product.id)}
+										disabled={permissionLevel === "EMPLOYEE"}
 									>
 										<FaTrash />
 									</button>
