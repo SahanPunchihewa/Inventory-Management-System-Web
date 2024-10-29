@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext } from "react";
 import ProductContext from "../../contexts/ProductContext";
 import { Spinner } from "../../components";
 
@@ -14,7 +14,7 @@ const ProductCreate = () => {
 			description: e.target.description.value,
 			quantityInStock: e.target.quantityInStock.value,
 			price: e.target.price.value,
-			mininumStockLevel: e.target.mininumStockLevel.value,
+			minimumStockLevel: e.target.minimumStockLevel.value,
 		};
 		createProduct(newProduct);
 	};
@@ -94,8 +94,8 @@ const ProductCreate = () => {
 						</label>
 						<input
 							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-							id="mininumStockLevel"
-							name="mininumStockLevel"
+							id="minimumStockLevel"
+							name="minimumStockLevel"
 							type="number"
 							placeholder="Enter Product Minimum Stock Level"
 						/>
