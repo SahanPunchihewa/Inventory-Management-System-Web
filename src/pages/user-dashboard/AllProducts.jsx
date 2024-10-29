@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
+import { FaEdit, FaPlus, FaTrash, FaSyncAlt } from "react-icons/fa";
 import ProductContext from "../../contexts/ProductContext";
 import { Spinner } from "../../components";
 import jsPDF from "jspdf";
@@ -61,13 +61,23 @@ const AllProducts = () => {
 				</h2>
 			</div>
 
-			<div className="mb-4 flex justify-center md:justify-start">
+			<div className="mb-4 flex justify-between items-center">
 				<button
 					onClick={() => handleGenerateSummary()}
 					className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 font-semibold"
 				>
 					Inventory Summary Report
 				</button>
+
+				{/* Create Button aligned to the right */}
+				<div className="flex justify-end">
+					<Link to="/user/product/create">
+						<button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 font-semibold flex items-center gap-2">
+							<FaPlus />
+							Create Product
+						</button>
+					</Link>
+				</div>
 			</div>
 
 			<div className="overflow-x-auto rounded-lg">
@@ -107,14 +117,16 @@ const AllProducts = () => {
 								<td className="py-2 px-4 border">
 									<Link to="/user/product/create">
 										<button className="bg-blue-500 text-white px-2 py-1 rounded flex items-center gap-1 hover:bg-blue-600 shadow-md">
-											<FaPlus />
+											<FaSyncAlt />
 										</button>
 									</Link>
 								</td>
 								<td className="py-2 px-4 border">
-									<button className="bg-yellow-500 text-white px-2 py-1 rounded flex items-center gap-1 hover:bg-yellow-600 shadow-md">
-										<FaEdit />
-									</button>
+									<Link to={`/user/product/edit/${product.id}`}>
+										<button className="bg-yellow-500 text-white px-2 py-1 rounded flex items-center gap-1 hover:bg-yellow-600 shadow-md">
+											<FaEdit />
+										</button>
+									</Link>
 								</td>
 
 								<td className="py-2 px-4 border">

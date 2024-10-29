@@ -6,13 +6,13 @@ import { makeToast } from "../components";
 const ProductContext = createContext();
 
 export function ProductProvider({ children }) {
+	const navigate = useNavigate();
 	const [isLoading, setIsLoading] = useState(false);
 	const [products, setProducts] = useState([]);
 	const [inventorySummary, setInventorySummary] = useState([]);
 	const [lowStockProducts, setLowStockProducts] = useState([]);
 	const [outOfStockProducts, setOutOfStockProducts] = useState([]);
 	const [product, setProduct] = useState({
-		id: "",
 		productId: "",
 		name: "",
 		description: "",
@@ -59,15 +59,71 @@ export function ProductProvider({ children }) {
 
 	// delete product
 	const deleteProduct = (id) => {
+		setIsLoading(true);
 		ProductAPI.deleteProduct(id)
 			.then((response) => {
-				isLoading(true);
 				setProducts(products.filter((product) => product.id !== id));
 				makeToast({ type: "success", message: "Product deleted" });
+			})
+			.catch((error) => {
+				makeToast({ type: "error", message: "Product not deleted" });
+			})
+			.finally(() => {
+				setIsLoading(false);
+			});
+	};
+
+	// create product
+	const createProduct = async (values) => {
+		try {
+			setIsLoading(true);
+			const response = await ProductAPI.createProduct(values);
+			setProducts([...products, response.data]);
+			setIsLoading(false);
+			makeToast({ type: "success", message: "Product created" });
+			navigate("/user");
+		} catch (error) {
+			makeToast({ type: "error", message: "Product not created" });
+			setIsLoading(false);
+		}
+	};
+
+	// get one product
+	const getProduct = (id) => {
+		isLoading(true);
+		ProductAPI.getOneProduct(id)
+			.then((response) => {
+				setProduct(response.data);
 				setIsLoading(false);
 			})
 			.catch((error) => {
-				makeToast("error", error.response.data.message);
+				makeToast({ type: "error", message: "Product not found" });
+			});
+	};
+
+	// Update product
+	const updateProduct = (values) => {
+		const newProductUpdate = {
+			id: values.id,
+			productId: values.productId,
+			name: values.name,
+			description: values.description,
+			quantityInStock: values.quantityInStock,
+			price: values.price,
+			minimumStockLevel: values.minimumStockLevel,
+		};
+
+		setIsLoading(true); // Corrected loading state update
+		ProductAPI.updateProduct(newProductUpdate)
+			.then((response) => {
+				setProducts(products.map((product) => (product.id === values.id ? newProductUpdate : product)));
+				setIsLoading(false);
+				makeToast({ type: "success", message: "Product updated" });
+				navigate("/user");
+			})
+			.catch((error) => {
+				setIsLoading(false); // Ensure loading state resets on error
+				makeToast({ type: "error", message: "Product not updated" });
 			});
 	};
 
@@ -87,6 +143,9 @@ export function ProductProvider({ children }) {
 				outOfStockProducts,
 				setOutOfStockProducts,
 				deleteProduct,
+				createProduct,
+				getProduct,
+				updateProduct,
 			}}
 		>
 			{children}

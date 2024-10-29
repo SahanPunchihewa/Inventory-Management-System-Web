@@ -1,22 +1,41 @@
-import { createContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 import ProductContext from "../../contexts/ProductContext";
+import { Spinner } from "../../components";
 
 const ProductCreate = () => {
+	const { createProduct, isLoading } = useContext(ProductContext);
+
+	const handleSumbit = (e) => {
+		e.preventDefault();
+
+		const newProduct = {
+			productId: e.target.productId.value,
+			name: e.target.name.value,
+			description: e.target.description.value,
+			quantityInStock: e.target.quantityInStock.value,
+			price: e.target.price.value,
+			mininumStockLevel: e.target.mininumStockLevel.value,
+		};
+		createProduct(newProduct);
+	};
+
 	return (
 		<>
 			<div className="max-w-md mx-auto mt-10 bg-white shadow-lg rounded-lg overflow-hidden">
+				{isLoading && <Spinner />}
 				<div className="text-2xl py-4 px-6 bg-primary-color text-white text-center font-bold uppercase">
 					Create New Product
 				</div>
-				<form className="py-4 px-6" action method="POST">
+				<form className="py-4 px-6" onSubmit={handleSumbit}>
 					<div className="mb-4">
 						<label className="block text-gray-700 font-bold mb-2" htmlFor="">
 							Product ID
 						</label>
 						<input
 							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-							id="name"
-							type="text"
+							id="productId"
+							name="productId"
+							type="number"
 							placeholder="Enter Product ID"
 						/>
 					</div>
@@ -26,8 +45,9 @@ const ProductCreate = () => {
 						</label>
 						<input
 							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-							id="email"
-							type="email"
+							id="name"
+							name="name"
+							type="text"
 							placeholder="Enter Product Name"
 						/>
 					</div>
@@ -37,8 +57,9 @@ const ProductCreate = () => {
 						</label>
 						<textarea
 							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-							id="message"
-							rows={4}
+							id="description"
+							name="description"
+							rows={2}
 							placeholder="Enter Product Description"
 							defaultValue={""}
 						/>
@@ -49,7 +70,8 @@ const ProductCreate = () => {
 						</label>
 						<input
 							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-							id="date"
+							id="quantityInStock"
+							name="quantityInStock"
 							type="number"
 							placeholder="Enter Quantity In Stock"
 						/>
@@ -61,6 +83,7 @@ const ProductCreate = () => {
 						<input
 							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 							id="price"
+							name="price"
 							type="number"
 							placeholder="Enter Product Price"
 						/>
@@ -71,7 +94,8 @@ const ProductCreate = () => {
 						</label>
 						<input
 							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-							id="price"
+							id="mininumStockLevel"
+							name="mininumStockLevel"
 							type="number"
 							placeholder="Enter Product Minimum Stock Level"
 						/>
