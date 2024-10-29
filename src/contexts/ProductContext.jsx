@@ -110,7 +110,7 @@ export function ProductProvider({ children }) {
 			minimumStockLevel: values.minimumStockLevel,
 		};
 
-		setIsLoading(true); // Corrected loading state update
+		setIsLoading(true);
 		ProductAPI.updateProduct(values.id, newProductUpdate)
 			.then((response) => {
 				setProducts(products.map((product) => (product.id === values.id ? newProductUpdate : product)));
@@ -119,7 +119,7 @@ export function ProductProvider({ children }) {
 				navigate("/user");
 			})
 			.catch((error) => {
-				setIsLoading(false); // Ensure loading state resets on error
+				setIsLoading(false);
 				makeToast({ type: "error", message: "Product not updated" });
 			});
 	};

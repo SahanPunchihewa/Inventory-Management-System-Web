@@ -5,7 +5,7 @@ import CheckLoginStatus from "./CheckLoginStatus";
 
 import Header from "../components/Header";
 
-import { UserLogin, UserDashboard, ProductCreate, ProductEdit, UserCreate } from "../pages";
+import { UserLogin, UserDashboard, ProductCreate, ProductEdit, UserCreate, UserEditDetails } from "../pages";
 
 const AppRoutes = () => {
 	return (
@@ -29,6 +29,7 @@ const AppRoutes = () => {
 						<Route path="/user/product/create" element={<ProductCreate />} />
 						<Route path="/user/product/edit/:id" element={<ProductEdit />} />
 						<Route path="/user/create" element={<UserCreate />} />
+						<Route path="/user/edit/details/:id" element={<UserEditDetails />} />
 					</Route>
 
 					{/* Employee Private Routes */}

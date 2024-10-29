@@ -103,7 +103,7 @@ const AllProducts = () => {
 					</thead>
 					<tbody>
 						{products.map((product) => (
-							<tr key={product._id} className="hover:bg-gray-100">
+							<tr key={product.id} className="hover:bg-gray-100">
 								<td className="py-2 px-4 border">{product.productId}</td>
 								<td className="py-2 px-4 border">{product.name}</td>
 								<td className="py-2 px-4 border">{product.description}</td>

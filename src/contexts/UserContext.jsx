@@ -10,7 +10,8 @@ export function UserProvider({ children }) {
 	const navigate = useNavigate();
 	const [isLoading, setIsLoading] = useState(false);
 	const [users, setUsers] = useState([]);
-	const [usersList, setUsersList] = useState([]);
+	const [usernameError, setUsernameError] = useState("");
+	const [mailError, setMailError] = useState("");
 	const [user, setUser] = useState({
 		username: "",
 		email: "",
@@ -46,16 +47,7 @@ export function UserProvider({ children }) {
 		},
 	});
 
-	// get all users
-	useEffect(() => {
-		setIsLoading(true);
-		UserAPI.getAllUsers().then((response) => {
-			setUsersList(response.data);
-			setIsLoading(false);
-		});
-	}, []);
-
-	// get all users count
+	// get all users and count
 	useEffect(() => {
 		setIsLoading(true);
 		UserAPI.getAllUsers().then((response) => {
@@ -69,7 +61,7 @@ export function UserProvider({ children }) {
 		setIsLoading(true);
 		UserAPI.deleteUser(id)
 			.then((response) => {
-				setUsersList(usersList.filter((user) => user.id !== id));
+				setUsers(users.filter((user) => user.id !== id));
 				makeToast({ type: "success", message: "User deleted" });
 			})
 			.catch((error) => {
@@ -77,6 +69,62 @@ export function UserProvider({ children }) {
 			})
 			.finally(() => {
 				setIsLoading(false);
+			});
+	};
+	// register user
+	const userRegister = async (values) => {
+		setIsLoading(true);
+		UserAPI.register(values)
+			.then((response) => {
+				setUsers([...users, response.data]);
+				makeToast({ type: "success", message: "User registered" });
+				setIsLoading(false);
+				navigate("/user");
+			})
+			.catch((error) => {
+				if (error.response.data.details == "Username already exists") {
+					setUsernameError(error.response.data.details);
+					makeToast({ type: "error", message: "Username already exists" });
+				}
+				if (error.response.data.details == "Email already exists") {
+					setMailError(error.response.data.details);
+					makeToast({ type: "error", message: "Email already exists" });
+				}
+			});
+	};
+
+	// get one User
+	const getOneUser = (id) => {
+		useEffect(() => {
+			setIsLoading(true);
+			UserAPI.getOneUser(id).then((response) => {
+				setUser(response.data);
+				setIsLoading(false);
+			});
+		}, []);
+	};
+
+	//update user details
+	const updateUser = (values) => {
+		const newUserUpdate = {
+			id: values.id,
+			username: values.username,
+			email: values.email,
+			contact: values.contact,
+			role: values.role,
+			password: values.password,
+		};
+		setIsLoading(true);
+		UserAPI.updateUser(values.id, newUserUpdate)
+			.then((response) => {
+				setUsers(users.map((user) => (user.id === values.id ? newUserUpdate : user)));
+				setIsLoading(false);
+				makeToast({ type: "success", message: "User updated" });
+				navigate("/user");
+			})
+			.catch((error) => {
+				setIsLoading(false);
+				makeToast({ type: "error", message: "User not updated" });
 			});
 	};
 
@@ -92,8 +140,13 @@ export function UserProvider({ children }) {
 				users,
 				setUsers,
 				deleteUser,
-				setUsersList,
-				usersList,
+				userRegister,
+				usernameError,
+				setUsernameError,
+				mailError,
+				setMailError,
+				getOneUser,
+				updateUser,
 			}}
 		>
 			{children}

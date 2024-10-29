@@ -1,14 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ArrowRightOnRectangleIcon, ChartBarIcon, BuildingOfficeIcon, UserIcon } from "@heroicons/react/24/outline";
 import makeToast from "./toast";
 import { Link } from "react-router-dom";
 
 const Header = () => {
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+	const dropdownRef = useRef(null);
 
 	const toggleDropdown = () => {
 		setIsDropdownOpen(!isDropdownOpen);
 	};
+
+	const handleClickOutside = (event) => {
+		if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+			setIsDropdownOpen(false);
+		}
+	};
+
+	useEffect(() => {
+		document.addEventListener("mousedown", handleClickOutside);
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, []);
 
 	const permissionLevel = localStorage.getItem("permissionLevel");
 
@@ -42,7 +56,7 @@ const Header = () => {
 
 					<div className="flex items-center gap-6">
 						{permissionLevel && (
-							<div className="relative">
+							<div className="relative" ref={dropdownRef}>
 								<button
 									onClick={toggleDropdown}
 									className="flex items-center gap-2 text-lg font-semibold text-white transition duration-100 hover:text-secondary-sky-blue"

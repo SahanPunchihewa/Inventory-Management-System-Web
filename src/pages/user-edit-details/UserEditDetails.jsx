@@ -1,21 +1,30 @@
 import React, { useContext } from "react";
+import { useParams } from "react-router-dom";
 import UserContext from "../../contexts/UserContext";
 import { Spinner } from "../../components";
 
-const UserCeate = () => {
-	const { userRegister, isLoading } = useContext(UserContext);
+const UserEditDetails = () => {
+	const { updateUser, getOneUser, isLoading, setUser, user } = useContext(UserContext);
 
-	const handleSumbit = (e) => {
+	const handleChange = (e) => {
+		setUser(e.target.value);
+	};
+
+	const { id } = useParams();
+	getOneUser(id);
+
+	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		const newUser = {
+		const newUserUpdate = {
+			id: id,
 			username: e.target.username.value,
 			email: e.target.email.value,
 			contact: e.target.contact.value,
 			role: e.target.role.value,
 			password: e.target.password.value,
 		};
-		userRegister(newUser);
+		updateUser(newUserUpdate);
 	};
 	return (
 		<>
@@ -23,11 +32,11 @@ const UserCeate = () => {
 				{isLoading && <Spinner />}
 				<div className="sm:mx-auto sm:w-full sm:max-w-md">
 					<img className="mx-auto h-10 w-auto" src="https://www.svgrepo.com/show/301692/login.svg" alt="Workflow" />
-					<h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900">Create a new account</h2>
+					<h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900">Update Account</h2>
 				</div>
 				<div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
 					<div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-						<form onSubmit={handleSumbit}>
+						<form onSubmit={handleSubmit}>
 							<div>
 								<label htmlFor="" className="block text-sm font-medium leading-5  text-gray-700">
 									Name
@@ -37,6 +46,8 @@ const UserCeate = () => {
 										id="username"
 										name="username"
 										placeholder="Enter Username"
+										value={user.username}
+										onChange={handleChange}
 										type="text"
 										required
 										className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
@@ -60,6 +71,8 @@ const UserCeate = () => {
 									<input
 										id="email"
 										name="email"
+										value={user.email}
+										onChange={handleChange}
 										placeholder="Enter Email address"
 										type="email"
 										required
@@ -86,6 +99,8 @@ const UserCeate = () => {
 										name="contact"
 										placeholder="Enter Phone Number"
 										type="number"
+										value={user.contact}
+										onChange={handleChange}
 										required
 										className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
 									/>
@@ -108,6 +123,8 @@ const UserCeate = () => {
 									<select
 										id="role"
 										name="role"
+										value={user.role}
+										onChange={handleChange}
 										required
 										className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
 									>
@@ -124,6 +141,8 @@ const UserCeate = () => {
 									<input
 										id="password"
 										name="password"
+										value={user.password}
+										disabled
 										type="password"
 										placeholder="Enter Password"
 										required
@@ -138,7 +157,7 @@ const UserCeate = () => {
 										type="submit"
 										className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
 									>
-										Create account
+										Update User
 									</button>
 								</span>
 							</div>
@@ -149,4 +168,5 @@ const UserCeate = () => {
 		</>
 	);
 };
-export default UserCeate;
+
+export default UserEditDetails;

@@ -5,7 +5,7 @@ import UserContext from "../../contexts/UserContext";
 import { Spinner } from "../../components";
 
 const UserManagement = () => {
-	const { usersList, isLoading, deleteUser } = useContext(UserContext);
+	const { users, isLoading, deleteUser } = useContext(UserContext);
 
 	return (
 		<>
@@ -41,8 +41,8 @@ const UserManagement = () => {
 							</tr>
 						</thead>
 						<tbody>
-							{usersList.map((user) => (
-								<tr key={user._id} className="hover:bg-gray-100">
+							{users.map((user) => (
+								<tr key={user.id} className="hover:bg-gray-100">
 									<td className="py-2 px-4 border">{user.username}</td>
 									<td className="py-2 px-4 border">{user.email}</td>
 									<td className="py-2 px-4 border">{user.contact}</td>
@@ -58,7 +58,7 @@ const UserManagement = () => {
 										)}
 									</td>
 									<td className="py-2 px-4 border">
-										<Link to={`/user/product/edit/${user.id}`}>
+										<Link to={`/user/edit/details/${user.id}`}>
 											<button
 												className="bg-yellow-500 hover:bg-yellow-600
 												text-white px-2 py-1 rounded flex items-center gap-1 shadow-md"
