@@ -1,7 +1,8 @@
-import { useEffect, useState, useContext } from "react";
+import { useContext } from "react";
 import { FaBox, FaExclamationTriangle, FaClipboardList, FaChartPie } from "react-icons/fa";
 import { Spinner } from "../../components";
 import ProductContext from "../../contexts/ProductContext";
+import UserContext from "../../contexts/UserContext";
 
 const Card = ({ title, value, icon, color }) => {
 	return (
@@ -23,6 +24,7 @@ const Card = ({ title, value, icon, color }) => {
 
 const DashboardTab = () => {
 	const { inventorySummary, isLoading } = useContext(ProductContext);
+	const { users } = useContext(UserContext);
 	const { lowStockProduct, outOfStockProduct, totalProducts } = inventorySummary;
 
 	return (
@@ -37,7 +39,7 @@ const DashboardTab = () => {
 					color="bg-yellow-500"
 				/>
 				<Card title="Out of Stock Products" value={outOfStockProduct} icon={<FaClipboardList />} color="bg-red-500" />
-				<Card title="Total Employees" value="" icon={<FaChartPie />} color="bg-blue-500" />
+				<Card title="Total Users" value={users.length} icon={<FaChartPie />} color="bg-blue-500" />
 			</div>
 		</div>
 	);

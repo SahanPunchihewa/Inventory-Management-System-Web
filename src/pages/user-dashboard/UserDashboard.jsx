@@ -3,15 +3,19 @@ import DashboardTab from "./DashboardTab";
 import AllProduct from "./AllProducts";
 import LowStockProducts from "./LowStockProducts";
 import OutOfStockProduct from "./OutOfStockProduct";
+import UserManagement from "./UserManagement";
 import {
 	ArchiveBoxIcon,
 	ExclamationTriangleIcon,
 	ClipboardDocumentIcon,
 	ChartBarIcon,
+	UserGroupIcon,
 } from "@heroicons/react/24/outline";
 
 const UserDashboard = () => {
 	const [activeTab, setActiveTab] = useState(0);
+
+	const permissionLevel = localStorage.getItem("permissionLevel");
 
 	const tabs = [
 		{ name: "Dashboard", icon: <ChartBarIcon className="h-5 w-5 mr-2" />, component: <DashboardTab /> },
@@ -26,6 +30,12 @@ const UserDashboard = () => {
 			icon: <ClipboardDocumentIcon className="h-5 w-5 mr-2" />,
 			component: <OutOfStockProduct />,
 		},
+		{
+			name: "User Management",
+			icon: <UserGroupIcon className="h-5 w-5 mr-2" />,
+			component: <UserManagement />,
+			disabled: permissionLevel === "EMPLOYEE",
+		},
 	];
 
 	return (
@@ -36,8 +46,10 @@ const UserDashboard = () => {
 					<button
 						key={index}
 						className={`text-lg font-semibold flex-1 flex items-center justify-center p-2 transition duration-300 rounded-lg 
-                            ${activeTab === index ? "bg-gray-500 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300"}`}
-						onClick={() => setActiveTab(index)}
+							${activeTab === index ? "bg-gray-500 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300"} 
+							${tab.disabled ? "opacity-50 cursor-not-allowed" : ""}`}
+						onClick={() => !tab.disabled && setActiveTab(index)}
+						disabled={tab.disabled}
 					>
 						{tab.icon}
 						{tab.name}

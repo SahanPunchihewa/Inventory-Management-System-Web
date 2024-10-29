@@ -30,7 +30,7 @@ const LowStockProducts = () => {
 				item.description,
 				item.quantityInStock,
 				item.price,
-				item.mininumStockLevel,
+				item.minimumStockLevel,
 			];
 			tableRows.push(rowData);
 		});
@@ -82,24 +82,24 @@ const LowStockProducts = () => {
 						</thead>
 						<tbody>
 							{lowStockProducts.map((product) => (
-								<tr key={product._id} className="hover:bg-gray-100">
+								<tr key={product.id} className="hover:bg-gray-100">
 									<td className="py-2 px-4 border">{product.productId}</td>
 									<td className="py-2 px-4 border">{product.name}</td>
 									<td className="py-2 px-4 border">{product.description}</td>
 									<td className="py-2 px-4 border">{product.quantityInStock}</td>
 									<td className="py-2 px-4 border">{product.price}</td>
-									<td className="py-2 px-4 border">{product.mininumStockLevel}</td>
+									<td className="py-2 px-4 border">{product.minimumStockLevel}</td>
 									<td className="py-2 px-4 border">
 										{product.quantityInStock === 0 ? (
-											<span className="bg-red-500 text-white py-1 px-2 rounded-full text-xs font-bold shadow-md">
+											<span className="bg-red-500 text-white py-1 px-2 rounded-full text-sm font-bold shadow-md">
 												Out of Stock
 											</span>
-										) : product.quantityInStock < product.mininumStockLevel ? (
-											<span className="bg-yellow-500 text-white py-1 px-2 rounded-full text-xs font-bold shadow-md">
+										) : product.quantityInStock < product.minimumStockLevel ? (
+											<span className="bg-yellow-500 text-white py-1 px-2 rounded-full text-sm font-bold shadow-md">
 												Low Stock
 											</span>
 										) : (
-											<span className="bg-green-500 text-white py-1 px-2 rounded-full text-xs font-bold shadow-md">
+											<span className="bg-green-500 text-white py-1 px-2 rounded-full text-sm font-bold shadow-md">
 												In Stock
 											</span>
 										)}
