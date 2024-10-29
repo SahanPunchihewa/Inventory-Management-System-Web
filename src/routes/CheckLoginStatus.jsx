@@ -5,7 +5,7 @@ const CheckLoginStatus = () => {
 	const permissionLevel = localStorage.getItem("permissionLevel");
 
 	if (permissionLevel === "ADMIN") {
-		return <Navigate to="/admin" />;
+		return <Navigate to="/user" />;
 	}
 	if (permissionLevel === "EMPLOYEE") {
 		return <Navigate to="/employee" />;

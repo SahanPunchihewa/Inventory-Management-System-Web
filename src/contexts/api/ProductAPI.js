@@ -7,7 +7,7 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 class ProductAPI {
 	// create new product
 	static createProduct(values) {
-		return axios.post(`${BASE_URL}/api/Product/create`, values, requestConfig);
+		return axios.post(`${BASE_URL}/api/Product/create`, values, requestConfigJson);
 	}
 
 	// get all products
