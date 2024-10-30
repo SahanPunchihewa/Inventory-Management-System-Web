@@ -2,7 +2,7 @@ import { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import UserAPI from "./api/UserAPI";
 import { makeToast } from "../components";
-import { useMutation } from "@tanstack/react-query";
+import Joi from "joi";
 
 const UserContext = createContext();
 
@@ -20,35 +20,61 @@ export function UserProvider({ children }) {
 		role: "",
 	});
 
-	// user login
-	const { mutate: loginUser, isLoading: loginUserLoading } = useMutation({
-		mutationFn: () => UserAPI.login(user),
-		onSuccess: (response) => {
-			setIsLoading(true);
-			if (response.data.role === "ADMIN") {
-				localStorage.setItem("uId", response.data.id);
-				localStorage.setItem("username", response.data.username);
-				localStorage.setItem("permissionLevel", response.data.role);
-				localStorage.setItem("authToken", response.data.token);
-				setIsLoading(false);
-				makeToast({ type: "success", message: "Login Successful" });
-				window.location.href = "/user";
-			} else if (response.data.role === "EMPLOYEE") {
-				localStorage.setItem("uId", response.data.id);
-				localStorage.setItem("username", response.data.username);
-				localStorage.setItem("permissionLevel", response.data.role);
-				localStorage.setItem("authToken", response.data.token);
-				makeToast({ type: "success", message: "Login Successful" });
-				setIsLoading(false);
-				window.location.href = "/user";
-			} else {
-				makeToast({ type: "error", message: "Invalid Credentials" });
-			}
-		},
-		onError: (error) => {
-			makeToast({ type: "error", message: "Login Failed" });
-		},
+	// Login Form Validation
+	const LoginFormSchema = Joi.object({
+		username: Joi.string().min(2).message("Username should be valid"),
+		password: Joi.string().min(2).message("Password should be at least 2 characters long"),
 	});
+
+	// User registration Form Validation
+	const UserFormSchema = Joi.object({
+		username: Joi.string().min(2).message("Username should be valid"),
+		email: Joi.string()
+			.email({ tlds: { allow: false } })
+			.message("Email should be valid"),
+		contact: Joi.string().max(10).message("Contact should be valid"),
+		password: Joi.string().min(2).message("Password should be at least 2 characters long"),
+		role: Joi.string().min(2).message("Role should be valid"),
+	});
+
+	// user login
+	const loginUser = (values) => {
+		setIsLoading(true);
+		const { error } = LoginFormSchema.validate(values);
+		if (error) {
+			makeToast({ type: "error", message: error.details[0].message });
+			return;
+		}
+		UserAPI.login(values)
+			.then((response) => {
+				if (response.data.role === "ADMIN") {
+					localStorage.setItem("uId", response.data.id);
+					localStorage.setItem("username", response.data.username);
+					localStorage.setItem("permissionLevel", response.data.role);
+					localStorage.setItem("authToken", response.data.token);
+					setIsLoading(true);
+					setIsLoading(false);
+					makeToast({ type: "success", message: "Login Successful" });
+					window.location.href = "/user";
+				} else if (response.data.role === "EMPLOYEE") {
+					localStorage.setItem("uId", response.data.id);
+					localStorage.setItem("username", response.data.username);
+					localStorage.setItem("permissionLevel", response.data.role);
+					localStorage.setItem("authToken", response.data.token);
+					setIsLoading(true);
+					setIsLoading(false);
+					makeToast({ type: "success", message: "Login Successful" });
+					window.location.href = "/user";
+				} else {
+					makeToast({ type: "error", message: "Invalid Credentials" });
+					setIsLoading(false);
+				}
+			})
+			.catch((error) => {
+				setIsLoading(false);
+				makeToast({ type: "error", message: "Login Failed" });
+			});
+	};
 
 	// get all users and count
 	useEffect(() => {
@@ -77,6 +103,11 @@ export function UserProvider({ children }) {
 	// register user
 	const userRegister = async (values) => {
 		setIsLoading(true);
+		const { error } = UserFormSchema.validate(values);
+		if (error) {
+			makeToast({ type: "error", message: error.details[0].message });
+			return;
+		}
 		UserAPI.register(values)
 			.then((response) => {
 				setUsers([...users, response.data]);
@@ -88,10 +119,15 @@ export function UserProvider({ children }) {
 				if (error.response.data.details == "Username already exists") {
 					setUsernameError(error.response.data.details);
 					makeToast({ type: "error", message: "Username already exists" });
+					setIsLoading(false);
 				}
 				if (error.response.data.details == "Email already exists") {
 					setMailError(error.response.data.details);
 					makeToast({ type: "error", message: "Email already exists" });
+					setIsLoading(false);
+				} else {
+					makeToast({ type: "error", message: "User not registered" });
+					setIsLoading(false);
 				}
 			});
 	};
@@ -137,7 +173,7 @@ export function UserProvider({ children }) {
 				user,
 				setUser,
 				loginUser,
-				loginUserLoading,
+				// loginUserLoading,
 				isLoading,
 				setIsLoading,
 				users,
@@ -150,6 +186,8 @@ export function UserProvider({ children }) {
 				setMailError,
 				getOneUser,
 				updateUser,
+				LoginFormSchema,
+				UserFormSchema,
 			}}
 		>
 			{children}

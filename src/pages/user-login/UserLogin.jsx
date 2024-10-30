@@ -3,11 +3,17 @@ import UserContext from "../../contexts/UserContext";
 import { Spinner } from "../../components";
 
 const UserLogin = () => {
-	const { loginUser, loginUserLoading, user, setUser, isLoading } = useContext(UserContext);
+	const { loginUser, isLoading } = useContext(UserContext);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		loginUser();
+
+		const newUser = {
+			username: e.target.username.value,
+			password: e.target.password.value,
+		};
+
+		loginUser(newUser);
 	};
 
 	return (
@@ -19,7 +25,8 @@ const UserLogin = () => {
 						<img src="/loginImg.png" />
 					</div>
 					<div className="w-full p-8 lg:w-1/2">
-						<h2 className="text-2xl font-semibold text-gray-700 text-center mb-2">Inventory Management System</h2>
+						<h2 className="text-2xl font-semibold text-gray-700 text-center mb-2">ShopEasy</h2>
+						<p className="text-xl text-gray-600 text-center">Inventory Management System</p>
 						<p className="text-xl text-gray-600 text-center">Welcome back!</p>
 
 						<form onSubmit={handleSubmit}>
@@ -32,7 +39,6 @@ const UserLogin = () => {
 									className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
 									placeholder="Enter your username"
 									required
-									onChange={(e) => setUser({ ...user, username: e.target.value })}
 								/>
 							</div>
 							<div className="mt-4">
@@ -46,7 +52,6 @@ const UserLogin = () => {
 									className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
 									placeholder="Enter your password"
 									required
-									onChange={(e) => setUser({ ...user, password: e.target.value })}
 								/>
 							</div>
 
@@ -54,8 +59,9 @@ const UserLogin = () => {
 								<button
 									type="submit"
 									className="bg-gray-700 text-white font-bold py-2 px-4 w-full rounded hover:bg-gray-600"
+									disabled={isLoading}
 								>
-									Login
+									{isLoading ? "Loading..." : "Login"}
 								</button>
 							</div>
 						</form>
