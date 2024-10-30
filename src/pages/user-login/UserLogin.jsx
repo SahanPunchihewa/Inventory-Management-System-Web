@@ -3,7 +3,7 @@ import UserContext from "../../contexts/UserContext";
 import { Spinner } from "../../components";
 
 const UserLogin = () => {
-	const { loginUser, loginUserLoading, user, setUser } = useContext(UserContext);
+	const { loginUser, loginUserLoading, user, setUser, isLoading } = useContext(UserContext);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -13,6 +13,7 @@ const UserLogin = () => {
 	return (
 		<>
 			<div className="py-16 mt-10">
+				{isLoading && <Spinner />}
 				<div className="flex bg-white rounded-lg shadow-lg overflow-hidden mx-auto max-w-sm lg:max-w-4xl">
 					<div className="hidden lg:block lg:w-1/2 bg-cover">
 						<img src="/loginImg.png" />
@@ -53,9 +54,8 @@ const UserLogin = () => {
 								<button
 									type="submit"
 									className="bg-gray-700 text-white font-bold py-2 px-4 w-full rounded hover:bg-gray-600"
-									disabled={loginUserLoading}
 								>
-									{loginUserLoading ? "Logging in..." : "Login"}
+									Login
 								</button>
 							</div>
 						</form>
