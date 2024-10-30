@@ -43,27 +43,20 @@ export function UserProvider({ children }) {
 		const { error } = LoginFormSchema.validate(values);
 		if (error) {
 			makeToast({ type: "error", message: error.details[0].message });
+			setIsLoading(false);
 			return;
 		}
 		UserAPI.login(values)
 			.then((response) => {
-				if (response.data.role === "ADMIN") {
-					localStorage.setItem("uId", response.data.id);
-					localStorage.setItem("username", response.data.username);
-					localStorage.setItem("permissionLevel", response.data.role);
-					localStorage.setItem("authToken", response.data.token);
-					setIsLoading(true);
-					setIsLoading(false);
+				const { role, id, username, token } = response.data;
+
+				if (role === "ADMIN" || role === "EMPLOYEE") {
+					localStorage.setItem("uId", id);
+					localStorage.setItem("username", username);
+					localStorage.setItem("permissionLevel", role);
+					localStorage.setItem("authToken", token);
 					makeToast({ type: "success", message: "Login Successful" });
-					window.location.href = "/user";
-				} else if (response.data.role === "EMPLOYEE") {
-					localStorage.setItem("uId", response.data.id);
-					localStorage.setItem("username", response.data.username);
-					localStorage.setItem("permissionLevel", response.data.role);
-					localStorage.setItem("authToken", response.data.token);
-					setIsLoading(true);
 					setIsLoading(false);
-					makeToast({ type: "success", message: "Login Successful" });
 					window.location.href = "/user";
 				} else {
 					makeToast({ type: "error", message: "Invalid Credentials" });
@@ -72,7 +65,7 @@ export function UserProvider({ children }) {
 			})
 			.catch((error) => {
 				setIsLoading(false);
-				makeToast({ type: "error", message: "Login Failed" });
+				makeToast({ type: "error", message: error.response?.data?.message || "Login Failed" });
 			});
 	};
 
