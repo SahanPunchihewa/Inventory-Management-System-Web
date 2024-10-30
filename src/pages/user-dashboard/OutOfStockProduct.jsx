@@ -85,7 +85,7 @@ const OutOfStockProduct = () => {
 									<td className="py-2 px-4 border">{product.name}</td>
 									<td className="py-2 px-4 border">{product.description}</td>
 									<td className="py-2 px-4 border">{product.quantityInStock}</td>
-									<td className="py-2 px-4 border">{product.price}</td>
+									<td className="py-2 px-4 border">Rs. {product.price}</td>
 									<td className="py-2 px-4 border">{product.minimumStockLevel}</td>
 									<td className="py-2 px-4 border">
 										{product.quantityInStock === 0 ? (

@@ -20,7 +20,7 @@ const AllProducts = () => {
 			"Product Name",
 			"Product Description",
 			"Quantity In Stock",
-			"Unit Price",
+			"Unit Price (Rs.)",
 			"Minimum Stock Level",
 		];
 		const tableRows = [];
@@ -47,10 +47,10 @@ const AllProducts = () => {
 		doc.text(`Generated on: ${today}`, 14, 22);
 		doc.autoTable(tableColumn, tableRows, { startY: 70 });
 		doc.setFontSize(12);
-		doc.text(`Total Products: ${totalProducts}`, 14, 32);
+		doc.text(`Total Products:${totalProducts}`, 14, 32);
 		doc.text(`Low Stock Products: ${lowStockProduct}`, 14, 42);
 		doc.text(`Out of Stock Products: ${outOfStockProduct}`, 14, 52);
-		doc.text(`Total Value of Products: ${totalValue}`, 14, 62);
+		doc.text(`Total Value of Products: Rs.${totalValue}`, 14, 62);
 		doc.save("inventory-summary.pdf");
 	}
 
@@ -108,7 +108,7 @@ const AllProducts = () => {
 								<td className="py-2 px-4 border">{product.name}</td>
 								<td className="py-2 px-4 border">{product.description}</td>
 								<td className="py-2 px-4 border">{product.quantityInStock}</td>
-								<td className="py-2 px-4 border">{product.price}</td>
+								<td className="py-2 px-4 border">Rs. {product.price}</td>
 								<td className="py-2 px-4 border">{product.minimumStockLevel}</td>
 								<td className="py-2 px-4 border">
 									{product.quantityInStock === 0 ? (
