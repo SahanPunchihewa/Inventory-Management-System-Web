@@ -29,30 +29,30 @@ const UserManagement = () => {
 				</div>
 
 				<div className="overflow-x-auto rounded-lg">
-					<table className="min-w-full bg-white border border-gray-300 text-xs sm:text-sm md:text-base">
+					<table className="min-w-full bg-white border border-gray-300 text-xs sm:text-sm md:text-md">
 						<thead>
 							<tr className="bg-gray-200">
-								<th className="py-2 px-4 border">User Name</th>
-								<th className="py-2 px-4 border">Email Address</th>
-								<th className="py-2 px-4 border">User Contact</th>
-								<th className="py-2 px-4 border">User Role</th>
-								<th className="py-2 px-4 border">Edit</th>
-								<th className="py-2 px-4 border">Delete</th>
+								<th className="py-2 px-2 border">User Name</th>
+								<th className="py-2 px-2 border">Email Address</th>
+								<th className="py-2 px-2 border">User Contact</th>
+								<th className="py-2 px-2 border">User Role</th>
+								<th className="py-2 px-2 border">Edit</th>
+								<th className="py-2 px-2 border">Delete</th>
 							</tr>
 						</thead>
 						<tbody>
 							{users.map((user) => (
-								<tr key={user.id} className="hover:bg-gray-100">
-									<td className="py-2 px-4 border">{user.username}</td>
-									<td className="py-2 px-4 border">{user.email}</td>
-									<td className="py-2 px-4 border">{user.contact}</td>
-									<td className="py-2 px-4 border">
+								<tr key={user} className="hover:bg-gray-100">
+									<td className="py-2 px-2 border">{user.username}</td>
+									<td className="py-2 px-2 border">{user.email}</td>
+									<td className="py-2 px-2 border">{user.contact}</td>
+									<td className="py-2 px-2 border">
 										{user.role === "ADMIN" ? (
-											<span className="bg-red-700 text-white py-1 px-2 rounded-full text-sm font-bold">
+											<span className="bg-red-700 text-white py-1 px-2 rounded-full text-xs font-semibold">
 												{user.role}
 											</span>
 										) : (
-											<span className="bg-sky-700 text-white py-1 px-2 rounded-full text-sm font-bold">
+											<span className="bg-sky-700 text-white py-1 px-2 rounded-full text-xs font-semibold">
 												{user.role}
 											</span>
 										)}

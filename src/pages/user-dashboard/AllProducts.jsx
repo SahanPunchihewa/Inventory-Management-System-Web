@@ -87,36 +87,42 @@ const AllProducts = () => {
 			</div>
 
 			<div className="overflow-x-auto rounded-lg">
-				<table className="min-w-full bg-white border border-gray-300 text-xs sm:text-sm md:text-base">
+				<table className="min-w-full bg-white border border-gray-300 text-xs sm:text-sm md:text-md">
 					<thead>
 						<tr className="bg-gray-200">
-							<th className="py-2 px-4 border">Product ID</th>
-							<th className="py-2 px-4 border">Product Name</th>
-							<th className="py-2 px-4 border">Product Description</th>
-							<th className="py-2 px-4 border">Quantity In Stock</th>
-							<th className="py-2 px-4 border">Price</th>
-							<th className="py-2 border">Minimum Stock Level</th>
-							<th className="py-2 px-4 border">Status</th>
-							<th className="py-2 px-4 border">Edit</th>
-							<th className="py-2 px-4 border">Delete</th>
+							<th className="py-2 px-2 border">Product ID</th>
+							<th className="py-2 px-2 border">Product Name</th>
+							<th className="py-2 px-2 border">Product Description</th>
+							<th className="py-2 px-2 border">Quantity In Stock</th>
+							<th className="py-2 px-2 border">Price</th>
+							<th className="py-2 px-2">Minimum Stock Level</th>
+							<th className="py-2 px-2 border">Status</th>
+							<th className="py-2 px-2 border">Edit</th>
+							<th className="py-2 px-2 border">Delete</th>
 						</tr>
 					</thead>
 					<tbody>
 						{products.map((product) => (
-							<tr key={product.id} className="hover:bg-gray-100">
-								<td className="py-2 px-4 border">{product.productId}</td>
-								<td className="py-2 px-4 border">{product.name}</td>
-								<td className="py-2 px-4 border">{product.description}</td>
-								<td className="py-2 px-4 border">{product.quantityInStock}</td>
-								<td className="py-2 px-4 border">Rs. {product.price}</td>
-								<td className="py-2 px-4 border">{product.minimumStockLevel}</td>
-								<td className="py-2 px-4 border">
+							<tr key={product} className="hover:bg-gray-100">
+								<td className="py-2 px-2 border">{product.productId}</td>
+								<td className="py-2 px-2 border">{product.name}</td>
+								<td className="py-2 px-2 border">{product.description}</td>
+								<td className="py-2 px-2 border">{product.quantityInStock}</td>
+								<td className="py-2 px-2 border">Rs. {product.price}</td>
+								<td className="py-2 px-2 border">{product.minimumStockLevel}</td>
+								<td className="py-2 px-2 border">
 									{product.quantityInStock === 0 ? (
-										<span className="bg-red-500 text-white py-1 px-2 rounded-full text-sm font-bold">Out of Stock</span>
+										<span className="bg-red-500 text-white py-1 px-2 rounded-full text-xs font-semibold">
+											Out of Stock
+										</span>
 									) : product.quantityInStock < product.minimumStockLevel ? (
-										<span className="bg-yellow-500 text-white py-1 px-2 rounded-full text-sm font-bold">Low Stock</span>
+										<span className="bg-yellow-500 text-white py-1 px-2 rounded-full text-xs font-semibold">
+											Low Stock
+										</span>
 									) : (
-										<span className="bg-green-500 text-white py-1 px-2 rounded-full text-sm font-bold">In Stock</span>
+										<span className="bg-green-500 text-white py-1 px-2 rounded-full text-xs font-semibold">
+											In Stock
+										</span>
 									)}
 								</td>
 								<td className="py-2 px-4 border">
