@@ -27,7 +27,7 @@ export function ProductProvider({ children }) {
 		productId: Joi.number().min(0).message("Product ID should be between 2 and 20 characters"),
 		name: Joi.string().min(2).max(20).message("Product name should be between 2 and 20 characters"),
 		description: Joi.string().min(2).max(100).message("Description should be between 2 and 100 characters"),
-		quantityInStock: Joi.number().min(1).message("Quantity in stock should be valid"),
+		quantityInStock: Joi.number().min(0).message("Quantity in stock should be valid"),
 		price: Joi.number().min(1).message("Price should be valid"),
 		minimumStockLevel: Joi.number().min(1).message("Minimum stock level should be valid"),
 	});
