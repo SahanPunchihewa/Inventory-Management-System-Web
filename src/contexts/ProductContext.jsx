@@ -2,6 +2,7 @@ import { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProductAPI from "./api/ProductAPI";
 import { makeToast } from "../components";
+import Joi from "joi";
 
 const ProductContext = createContext();
 
@@ -19,6 +20,16 @@ export function ProductProvider({ children }) {
 		quantityInStock: "",
 		price: "",
 		minimumStockLevel: "",
+	});
+
+	// Product Form Validation
+	const ProductFormSchema = Joi.object({
+		productId: Joi.number().min(2).max(20).message("Product ID should be between 2 and 20 characters"),
+		name: Joi.string().min(2).max(20).message("Product name should be between 2 and 20 characters"),
+		description: Joi.string().min(2).max(100).message("Description should be between 2 and 100 characters"),
+		quantityInStock: Joi.number().min(1).message("Quantity in stock should be valid"),
+		price: Joi.number().min(1).message("Price should be valid"),
+		minimumStockLevel: Joi.number().min(1).message("Minimum stock level should be valid"),
 	});
 
 	// Get all products
@@ -75,6 +86,13 @@ export function ProductProvider({ children }) {
 
 	// create product
 	const createProduct = async (values) => {
+		setIsLoading(true);
+		const { error } = ProductFormSchema.validate(values);
+		if (error) {
+			makeToast({ type: "error", message: error.message });
+			setIsLoading(false);
+			return;
+		}
 		try {
 			setIsLoading(true);
 			const response = await ProductAPI.createProduct(values);
@@ -100,6 +118,13 @@ export function ProductProvider({ children }) {
 	};
 	// Update product
 	const updateProduct = (values) => {
+		setIsLoading(true);
+		const { error } = ProductFormSchema.validate(values);
+		if (error) {
+			makeToast({ type: "error", message: error.message });
+			setIsLoading(false);
+			return;
+		}
 		const newProductUpdate = {
 			id: values.id,
 			productId: values.productId,
@@ -143,6 +168,7 @@ export function ProductProvider({ children }) {
 				createProduct,
 				getProduct,
 				updateProduct,
+				ProductFormSchema,
 			}}
 		>
 			{children}
