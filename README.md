@@ -18,10 +18,9 @@ https://github.com/SahanPunchihewa/Inventory-Management-System-Web.git
 
 3. Create a `.env` file in the `Inventory-Management-System-Web` directory and copy the variables from the `example.env` file into the `.env file`
 
-3. Finally run the frontend using this command `yarn dev` 
+4. Finally run the frontend using this command `yarn dev`
 
-4. In terminal will display the frontend running URL 
-
+5. In terminal will display the frontend running URL
 
 ## Deployement
 
