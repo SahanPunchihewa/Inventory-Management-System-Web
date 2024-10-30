@@ -24,7 +24,7 @@ export function ProductProvider({ children }) {
 
 	// Product Form Validation
 	const ProductFormSchema = Joi.object({
-		productId: Joi.number().min(2).max(20).message("Product ID should be between 2 and 20 characters"),
+		productId: Joi.number().min(0).message("Product ID should be between 2 and 20 characters"),
 		name: Joi.string().min(2).max(20).message("Product name should be between 2 and 20 characters"),
 		description: Joi.string().min(2).max(100).message("Description should be between 2 and 100 characters"),
 		quantityInStock: Joi.number().min(1).message("Quantity in stock should be valid"),
@@ -119,12 +119,6 @@ export function ProductProvider({ children }) {
 	// Update product
 	const updateProduct = (values) => {
 		setIsLoading(true);
-		const { error } = ProductFormSchema.validate(values);
-		if (error) {
-			makeToast({ type: "error", message: error.message });
-			setIsLoading(false);
-			return;
-		}
 		const newProductUpdate = {
 			id: values.id,
 			productId: values.productId,

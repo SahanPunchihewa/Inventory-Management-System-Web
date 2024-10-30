@@ -145,6 +145,7 @@ export function UserProvider({ children }) {
 
 	//update user details
 	const updateUser = (values) => {
+		setIsLoading(true);
 		const newUserUpdate = {
 			id: values.id,
 			username: values.username,
